@@ -1,0 +1,43 @@
+{
+  "name": "cypher",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "coffee server.coffee",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "derby-debug": "^0.1.0",
+    "async": "^0.9.0",
+    "coffee-script": "^1.9.2",
+    "derby-markdown": "^0.1.0",
+    "redis-url": "^1.2.0",
+    "cookie-parser": "^1.3.4",
+    "serve-favicon": "^2.2.0",
+    "coffeeify": "^1.0.0",
+    "chalk": "^1.0.0",
+    "compression": "^1.4.3",
+    "express-session": "^1.11.1",
+    "serve-static": "^1.9.2",
+    "passport-github": "^0.1.5",
+    "body-parser": "^1.12.3",
+    "express": "^4.12.3",
+    "livedb": "^0.5.9",
+    "derby-stylus": "^0.1.0",
+    "racer-highway": "^3.0.1",
+    "derby": "^0.6.0-alpha35",
+    "racer-bundle": "^0.1.1",
+    "derby-login": "^0.4.6",
+    "livedb-mongo": "^0.4.1",
+    "connect-mongo": "^0.8.0",
+    "d-codemirror": "^0.2.4"
+  },
+  "author": {
+    "name": "Ian Johnson",
+    "email": "ian@lever.co"
+  },
+  "license": "",
+  "readme": "cypher\n",
+  "readmeFilename": "README.md"
+}

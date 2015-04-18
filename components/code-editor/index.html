@@ -1,0 +1,17 @@
+<index:>
+  <div class="code-editor">
+    <div class="tabs">
+      {{each tabs as #tab}}
+        <div class="tab {{if active === #tab}}active{{/if}}" on-click="select(#tab)">
+        {{#tab}}
+        </div>
+      {{/each}}
+    </div>
+    <div class="editor-container">
+    {{on active}}
+      {{with @code[active] as #text}}
+      <view name="d-codemirror" text="{{#text}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: getMode(active) } }}"></view> 
+      {{/}}
+    {{/}}
+    </div>
+  </div>

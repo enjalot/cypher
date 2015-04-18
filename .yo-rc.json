@@ -1,0 +1,9 @@
+{
+  "generator-derby": {
+    "project": "cypher",
+    "apps": [
+      "cypher"
+    ],
+    "coffee": true
+  }
+}

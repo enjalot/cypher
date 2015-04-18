@@ -1,0 +1,13 @@
+
+<index:>
+
+  renders
+  {{each cyphers as #cypher}}
+    /{{#root._page.room}}/{{#cypher.id}}
+    <a href="/{{#root._page.room}}/{{#cypher.id}}">cypher</a>
+  {{/each}}
+
+
+<single-cypher:>
+  cypher: {{console.log("root cypher", #root._page.cypher)}}
+  <view is="cypher" cypher="{{#root._page.cypher}}"></view>
