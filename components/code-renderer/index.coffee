@@ -5,7 +5,6 @@ TEMPLATE = """
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="https://derbyjs.github.io/derby-standalone/dist/0.6.0-alpha37/derby-standalone.min.js"><""" + "/script>" + """</head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <style id="style-parent"></style>
 <style>
@@ -50,7 +49,7 @@ module.exports = class CodeRenderer
     Directly referencing the data is nice and fast, the proper way would be postMessage but again, since
     this is a trusted environment we should take advantage of it
     ###
-    @inner.sandbox = "allow-scripts allow-same-origin"
+    @inner.sandbox = "allow-scripts"
 
     @runCode()
     # when the code changes lets rebuild the iframe
