@@ -16,6 +16,11 @@ lever['services'] = ['derbyjs/mongo', 'derbyjs/redis', 'derbyjs/cypher']
 lever['repo_name'] = 'cypher'
 
 
+# Setup tasks
+@task
+def bootstrap():
+    '''Places upstart and varnish configs, reload varnish'''
+    put('cypher.conf', remote_path='/etc/init/derbyjs/', use_sudo=True)
 
 # Build/deploy tasks
 @task
