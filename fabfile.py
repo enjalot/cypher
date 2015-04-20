@@ -77,7 +77,7 @@ def deploy(tag=None):
     with cd('%s/%s' % (lever['repo_cache'], lever['repo_name'])):
         run('git fetch')
         run('git reset --hard %s' % tag)
-        run('docker build -t derbyjs/cypher.')
+        run('docker build -t derbyjs/cypher .')
     sleep(2)
 
     # Ensure dependent services running

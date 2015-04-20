@@ -1,4 +1,4 @@
-# BUILD-USING: docker build -t derbyjs/cypher.
+# BUILD-USING: docker build -t derbyjs/cypher
 # RUN-USING: docker run --name cypher --rm derbyjs/cypher
 
 # specify base docker image
@@ -17,7 +17,8 @@ ADD server /var/cypher/server
 ADD public /var/cypher/public
 ADD config /var/cypher/config
 
-ADD /var/lever/github.js /var/cypher/config
+WORKDIR /var/lever
+ADD /github.js /var/cypher/config
 
 # npm install all the things
 WORKDIR /var/cypher
