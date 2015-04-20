@@ -13,11 +13,12 @@ derbyLogin = require 'derby-login'
 module.exports = (store, apps, error, publicDir) ->
 
   connectStore = require('connect-mongo')(expressSession)
-
-  mongoURL = "mongodb://" + 
-    (process.env.MONGO_HOST || 'localhost') + ':' +
-    (process.env.MONGO_PORT || 27017) + '/' + 
-    process.env.MONGO_DB
+  
+  if process.env.MONGO_PORT
+    # weird thing for deploying for now
+    mongoURL = process.env.MONGO_PORT.replace('tcp', 'mongodb') + "/#{process.env.MONGO_DB}" 
+  else if process.env.MONGO_URL
+    mongoURL = process.env.MONGO_URL
   sessionStore = new connectStore url: mongoURL
 
   session = expressSession

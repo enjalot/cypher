@@ -5,13 +5,13 @@ module.exports = (derby, publicDir) ->
 
   console.log "PROCESS.ENV", process.env
 
-  if process.env.REDIS_HOST
-    process.env.REDIS_URL = "redis://#{REDIS_HOST}:#{REDIS_PORT}"
-
-  mongoURL = "mongodb://" + 
-    (process.env.MONGO_HOST || 'localhost') + ':' +
-    (process.env.MONGO_PORT || 27017) + '/' + 
-    process.env.MONGO_DB
+  if process.env.REDIS_PORT
+    process.env.REDIS_URL = process.env.REDIS_PORT.replace('tcp', 'redis')
+  if process.env.MONGO_PORT
+    # weird thing for deploying for now
+    mongoURL = process.env.MONGO_PORT.replace('tcp', 'mongodb') + "/#{process.env.MONGO_DB}" 
+  else if process.env.MONGO_URL
+    mongoURL = process.env.MONGO_URL
   console.log "url", mongoURL
 
   mongo = liveDbMongo mongoURL + '?auto_reconnect', {safe: true}
