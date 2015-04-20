@@ -18,7 +18,7 @@ ADD public /var/cypher/public
 ADD config /var/cypher/config
 
 WORKDIR /var/lever
-ADD /github.js /var/cypher/config
+ADD github.js /var/cypher/config
 
 # npm install all the things
 WORKDIR /var/cypher
