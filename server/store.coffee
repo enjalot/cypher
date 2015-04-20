@@ -2,9 +2,6 @@ liveDbMongo = require 'livedb-mongo'
 coffeeify = require 'coffeeify'
 
 module.exports = (derby, publicDir) ->
-
-  console.log "PROCESS.ENV", process.env
-
   if process.env.REDIS_PORT
     process.env.REDIS_URL = process.env.REDIS_PORT.replace('tcp', 'redis')
   if process.env.MONGO_PORT
