@@ -1,7 +1,7 @@
 {
   "NODE_ENV": "development",
   "PORT": 8787,
-  "MONGO_URL": "mongodb://localhost:27017/cypher",
+  "MONGO_DB": "cypher",
   "REDIS_URL": "redis://localhost:6379",
   "SESSION_SECRET": "0ea7adab3cb75d1bb967d766b995b7eeb5530a8f",
   "SESSION_COOKIE": "35ac335678d54a6b7288e7f5fb2ec9d4284a9763"

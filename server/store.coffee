@@ -2,7 +2,20 @@ liveDbMongo = require 'livedb-mongo'
 coffeeify = require 'coffeeify'
 
 module.exports = (derby, publicDir) ->
-  mongo = liveDbMongo process.env.MONGO_URL + '?auto_reconnect', {safe: true}
+
+  console.log "PROCESS.ENV", process.env
+
+  if process.env.REDIS_HOST
+    process.env.REDIS_URL = "redis://#{REDIS_HOST}:#{REDIS_PORT}"
+
+  mongoURL = "mongodb://" + 
+    (process.env.MONGO_HOST || 'localhost') + ':' +
+    (process.env.MONGO_PORT || 27017) + '/' + 
+    process.env.MONGO_DB
+  console.log "url", mongoURL
+
+  mongo = liveDbMongo mongoURL + '?auto_reconnect', {safe: true}
+
   derby.use require 'racer-bundle'
 
   redis = require 'redis-url'

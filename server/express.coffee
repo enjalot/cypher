@@ -13,7 +13,12 @@ derbyLogin = require 'derby-login'
 module.exports = (store, apps, error, publicDir) ->
 
   connectStore = require('connect-mongo')(expressSession)
-  sessionStore = new connectStore url: process.env.MONGO_URL
+
+  mongoURL = "mongodb://" + 
+    (process.env.MONGO_HOST || 'localhost') + ':' +
+    (process.env.MONGO_PORT || 27017) + '/' + 
+    process.env.MONGO_DB
+  sessionStore = new connectStore url: mongoURL
 
   session = expressSession
     secret: process.env.SESSION_SECRET
