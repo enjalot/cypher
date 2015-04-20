@@ -21,6 +21,8 @@ ADD config /var/cypher/config
 WORKDIR /var/cypher
 RUN npm install
 
+RUN npm install -g coffee-script
+
 # expose any ports we need
 EXPOSE 8787
 # the command that gets run inside the docker container
