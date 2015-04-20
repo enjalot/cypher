@@ -16,14 +16,40 @@ app.component require('../../components/cypher')
 app.loadViews __dirname + '/views'
 app.loadStyles __dirname + '/styles'
 
+app.get '*', (page, model, params, next) ->
+  if model.get '_session.loggedIn'
+    userId = model.get '_session.userId'
+    $user = model.at "users.#{userId}"
+    model.subscribe $user, ->
+      model.ref '_session.user', $user
+      next()
+  else
+    next()
+
+
 app.get '/', (page, model) ->
-  page.render 'home'
+
+  roomQuery = model.query 'rooms', {$limit: 20}
+  roomQuery.subscribe ->
+    roomQuery.ref "_page.rooms"
+    page.render 'home'
 
 app.get '/login', (page) ->
   page.render 'login'
 
 app.get '/register', (page) ->
   page.render 'register'
+
+app.proto.addRoom = () ->
+  model = app.model
+  return unless model.get "_session.loggedIn"
+  console.log "adding room"
+  model.add "rooms",
+    name: "just another room"
+    user:
+      id: model.get "_session.user.id"
+      name: model.get "_session.user.github.username"
+
 
 
 require './src/room'

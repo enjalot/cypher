@@ -10,7 +10,7 @@
     <div class="editor-container">
     {{on active}}
       {{with @code[active] as #text}}
-      <view name="d-codemirror" text="{{#text}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: getMode(active) } }}"></view> 
+      <view name="d-codemirror" text="{{#text}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: getMode(active), readOnly: @readOnly } }}"></view> 
       {{/}}
     {{/}}
     </div>

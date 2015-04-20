@@ -1,6 +1,14 @@
 <index:>
-  <p>Home</p>
+  <h1>Cypher</h1>
+  rooms:<br>
+  {{each _page.rooms as #room}}
+    {{#room.user.name}}'s room: <a href="/room/{{#room.id}}">{{#room.name}}</a>
+    <br>
+  {{/each}}
+  <br>
+  {{if _session.loggedIn}}
+    <button on-click="addRoom()">add room</button>
+  {{/if}}
 
-  rooms:
 
   

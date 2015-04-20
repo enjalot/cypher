@@ -1,3 +1,14 @@
+###
+this should be a file like:
+module.exports = {
+  clientID: "XXX",
+  clientSecret: "XXX"
+}
+you can create a github dev app:
+https://github.com/settings/applications
+###
+github = require("./github") or {}
+
 module.exports =
   # db collection
   collection: 'auths'
@@ -6,6 +17,7 @@ module.exports =
   user:
     id: true
     email: true
+    github: true
   confirmRegistration: false
   # passportjs options
   passport:
@@ -19,8 +31,6 @@ module.exports =
   strategies:
     github:
       strategy: require("passport-github").Strategy
-      conf:
-        clientID: "eeb00e8fa12f5119e5e9"
-        clientSecret: "61631bdef37fce808334c83f1336320846647115"
+      conf: github
   hooks:
     request: (req, res, userId, isAuthenticated, done) -> done()

@@ -1,0 +1,12 @@
+<index:>
+  <div class='row'>
+    <div class='col-sm-2 col-sm-offset-1'>
+    {{if !_session.loggedIn}}
+      <p><a href='/auth/github'>Login with Github</a></p>
+    {{else}}
+      <p>
+      You are logged in as {{_session.user.github.username}}
+      </p>
+    {{/if}}
+    </div>
+  </div>

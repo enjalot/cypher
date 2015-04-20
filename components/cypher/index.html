@@ -3,6 +3,34 @@ a cypher
 -->
 <index:>
   <div class="cypher">
-    <view is="code-editor" code="{{cypher.code}}"></view>
-    <view is="code-renderer" code="{{cypher.code}}"></view>
+    <input value="{{cypher.name}}" placeholder="cypher name" title="name">
+    <button on-click="forkCypher(cypher)">Fork</button>
+
+    <div class="extras">
+      <view is="libs" styles="{{cypher.libs}}"></view>
+      <view is="styles" styles="{{cypher.styles}}"></view>
+      <!-- <view is="data" styles="{{cypher.data}}"></view> -->
+    </div>
+
+    <view is="code-editor" code="{{cypher.code}}" read-only="{{readOnly}}"></view>
+    <view is="code-renderer"
+      code="{{cypher.code}}"
+      libs="{{cypher.libs}}"
+      styles="{{cypher.styles}}">
+      </view>
   </div>
+
+
+<libs:>
+  Library URLS:
+  {{each cypher.libs as #lib}}
+    <input value="{{#lib}}">
+  {{/each}}
+  <button class="plus" on-click="addLib()">+ lib</button>
+
+<styles:>
+  Stylesheet URLS:
+  {{each cypher.styles as #style}}
+    <input value="{{#style}}">
+  {{/each}}
+  <button class="plus" on-click="addStyle()">+ style</button>

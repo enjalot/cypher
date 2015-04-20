@@ -1,9 +1,11 @@
 <import: src='./home'>
 <import: src='./room'>
+<import: src='./login'>
 
 
 <Head:>
   <view name="d-codemirror:includes" static='/cm'></view>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Roboto:400,600' rel='stylesheet' type='text/css'>
 
 <Title:>
   {{_page.title}}
@@ -13,8 +15,18 @@
   <view is="{{$render.ns}}"/>
   <view is="footer" year="2014" />
 
+
 <header:>
-  <h1>Header</h1>
+  <div class="nav-header">
+    <a class="nav-link" href="/">Home</a>
+    {{console.log("session", _session)}}
+    {{if !_session.loggedIn}}
+     <a class="login nav-link" href="/auth/github?next={{$render.url}}">login</a>
+     {{else}}
+     <a class="logout nav-link" href="/auth/logout">logout</a>
+    {{/if}}
+  </div>
 
 <footer:>
-  <p>Footer {{@year}}</p>
+  <div class="footer">
+  </div>

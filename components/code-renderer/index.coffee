@@ -32,7 +32,11 @@ module.exports = class CodeRenderer
   init: () ->
     @code = @model.at "code"
     @data = @model.at "data"
+    @libs = @model.at "libs"
+    @styles = @model.at "styles"
     @data.setNull []
+    @libs.setNull []
+    @styles.setNull []
     @blobUrl = @model.at "blobUrl"
     @syntaxError = @model.at "syntaxError"
     @initError = @model.at "initError"
@@ -55,13 +59,21 @@ module.exports = class CodeRenderer
     # when the code changes lets rebuild the iframe
     @code.on("change", "**", @runCode.bind(@))
     @data.on("all", "**", @runCode.bind(@))
+    @libs.on("change", "**", @runCode.bind(@))
+    @styles.on("change", "**", @runCode.bind(@))
 
   runCode: ->
     code = @code.get()
     return unless code
+    libs = @libs.get()
+    styles = @styles.get()
+    t = TEMPLATE + ""
+    for lib in libs when lib
+      t += "<script src='#{lib}'></script>"
+    for style in styles when style
+      t += "<link rel='stylesheet' href='#{lib}'></link>"
 
-    t = TEMPLATE + 
-      "<style>\n" + code.css + "\n</style>" +
+    t += "<style>\n" + code.css + "\n</style>" +
       TEMPLATEBODY + 
       code.html +
       ENDCUSTOM + 

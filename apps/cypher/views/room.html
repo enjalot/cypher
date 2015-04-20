@@ -1,13 +1,37 @@
-
 <index:>
-
-  renders
+  <div class="room-nav">
+    <div class="name">Room: <input value="{{#root.rooms[#root._page.room].name}}"></div>
+    <br>
+    {{if canCreateCypher()}}
+    <div class="new-cypher">
+      <button on-click="addCypher()">new cypher</button>
+    </div>
+    {{/if}}
+  </div>
   {{each cyphers as #cypher}}
-    /{{#root._page.room}}/{{#cypher.id}}
-    <a href="/{{#root._page.room}}/{{#cypher.id}}">cypher</a>
+    <div class="room-cypher">
+      <a class="name" href="/room/{{#root._page.room}}/{{#cypher.id}}">
+        {{#cypher.name}} - by {{#cypher.user.name}}
+      </a>
+      <div class="cypher-thumb">
+        <view is="code-renderer"
+        code="{{#cypher.code}}"
+        libs="{{#cypher.libs}}"
+        styles="{{#cypher.styles}}">
+        </view>
+      </div>
+    </div>
   {{/each}}
+  
+  <!--
+  {{if #root._page.cypher}}
+    <view is="cypher" cypher="{{#root._page.cypher}}"></view>
+  {{/if}}
+  -->
 
 
 <single-cypher:>
-  cypher: {{console.log("root cypher", #root._page.cypher)}}
+  <div class="room-nav">
+    <a href="/room/{{room.id}}">{{room.name || "room"}}</a>
+  </div>
   <view is="cypher" cypher="{{#root._page.cypher}}"></view>
