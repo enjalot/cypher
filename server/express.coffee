@@ -44,8 +44,12 @@ module.exports = (store, apps, error, publicDir) ->
     .use handlers.middleware
 
     # static files for codemirror
-    node_modules = __dirname + '/../node_modules/';
-    cm = node_modules + "d-codemirror/node_modules/codemirror/";
+    node_modules = __dirname + '/../node_modules/'
+    cm = node_modules + "d-codemirror/node_modules/codemirror/"
+    showdown = node_modules + "d-showdown/node_modules/showdown/compressed"
+    console.log 'showdown', showdown
+
+    expressApp.use('/showdown', express.static(showdown));
     expressApp.use('/cm', express.static(cm));
 
   apps.forEach (app) -> expressApp.use app.router()

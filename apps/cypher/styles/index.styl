@@ -4,6 +4,7 @@
 @import "../../../node_modules/d-codemirror/node_modules/codemirror-inlet/inlet.css"
 
 @import "./home"
+@import "./room"
 
 headerHeight = 60px
 
@@ -25,34 +26,5 @@ body
     float: right
 
 
-// ROOM
-.room
-  //.new-cypher
-  a,a:visited
-    color: black
-    font-family: Roboto
-  a:hover
-    color: black
-    
-  .room-cypher
-    float:left
-    margin: 5px
-    padding: 15px
-    background: #f8f8f8
-
-    .name
-      line-height:45px
-
-  .cypher-thumb
-    width: 300px
-    height: 300px
-    .component-renderer
-      width: 600px
-      height: 600px
-      transform: scale(0.5)translate(-50%, -50%)
-
-    .iframe
-      min-height: 0
-
-
-// CYPHER
+.hidden
+  display: none

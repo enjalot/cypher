@@ -8,20 +8,53 @@
     </div>
     {{/if}}
   </div>
-  {{each cyphers as #cypher}}
-    <div class="room-cypher">
-      <a class="name" href="/room/{{#root._page.room}}/{{#cypher.id}}">
-        {{#cypher.name}} - by {{#cypher.user.name}}
-      </a>
-      <div class="cypher-thumb">
+  <div class="room-content">
+    <div class="primary-cypher">
         <view is="code-renderer"
-        code="{{#cypher.code}}"
-        libs="{{#cypher.libs}}"
-        styles="{{#cypher.styles}}">
+          code="{{primary.code}}"
+          libs="{{primary.libs}}"
+          styles="{{primary.styles}}">
         </view>
+    </div>
+    <div class="right-wrapper">
+      {{if canEdit()}}
+        <a on-click="edit()">Edit</a>
+      {{/if}}
+      <div class="description">
+        {{if editing}}
+          <view name="d-codemirror" text="{{room.md}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: 'markdown' } }}"></view> 
+        {{/if}}
+        {{if room.video}}
+          <div class="video">
+            <iframe width="420" height="315" src="{{room.video}}" frameborder="0" allowfullscreen></iframe>      
+          </div>
+        {{/if}}
+          <view is="d-showdown" text="{{room.md}}" html="{{room.description}}" options="{{ {} }}"></view>
+        {{unescaped room.description}}
       </div>
     </div>
-  {{/each}}
+  </div>
+  <div class="cyphers">
+    {{each cyphers as #cypher}}
+      {{if #cypher.id !== room.primaryId}}
+      <div class="room-cypher" >
+        <a class="name" href="/room/{{#root._page.room}}/{{#cypher.id}}">
+          {{#cypher.name}} - by {{#cypher.user.name}}
+        </a>
+        {{if roomIsMine(#cypher.user.id)}}
+          <a class="make-primary" on-click="makePrimary(#cypher)">primary</a>
+        {{/if}}
+        <div class="cypher-thumb">
+          <view is="code-renderer"
+          code="{{#cypher.code}}"
+          libs="{{#cypher.libs}}"
+          styles="{{#cypher.styles}}">
+          </view>
+        </div>
+      </div>
+      {{/if}}
+    {{/each}}
+  </div>
   
   <!--
   {{if #root._page.cypher}}

@@ -9,6 +9,7 @@ app.serverUse module, 'derby-stylus'
 app.serverUse module, 'derby-markdown'
 
 app.component require 'd-codemirror'
+app.component require 'd-showdown'
 app.component require('../../components/code-editor')
 app.component require('../../components/code-renderer')
 app.component require('../../components/cypher')

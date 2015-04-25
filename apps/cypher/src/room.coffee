@@ -58,9 +58,24 @@ class Room
     filter = @model.filter @model.scope("cyphers"), (cypher) ->
       return true
     @model.ref "cyphers", filter
+    room = @model.root.get "_page.room"
+    @model.ref "room", @model.scope("rooms.#{room}")
+    #if @model.get("cyphers").length == 1
+    #  @model.set "room.primaryId", @model.get("cyphers")[0]
+    if primaryId = @model.get "room.primaryId"
+      @model.ref "primary", @model.scope("cyphers.#{primaryId}")
+    @model.on "change", "room.primaryId", (primaryId) =>
+      console.log 'changed', primaryId
+      @model.ref "primary", @model.scope("cyphers.#{primaryId}")
 
   create: ->
     console.log "create"
+
+  makePrimary: (cypher) ->
+    @model.set "room.primaryId", cypher.id if cypher?.id
+
+  roomIsMine: ->
+    return @model.get("room.user.id") == @model.root.get("_session.userId")
 
   canCreateCypher: ->
     session = @model.root.get("_session") or {}
@@ -71,6 +86,18 @@ class Room
     return true
 
   addCypher: ->
+
+  canEdit: ->
+    session = @model.root.get("_session") or {}
+    return false unless session.loggedIn
+    return false unless session.user?.id == @model.get("room.user.id")
+    return true
+
+  edit: ->
+    return unless @canEdit()
+    editing = !@model.get "editing"
+    @model.set "editing", editing
+
 
 app.component 'room', Room
 
