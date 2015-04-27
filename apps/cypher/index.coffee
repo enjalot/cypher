@@ -12,7 +12,6 @@ app.component require 'd-codemirror'
 app.component require 'd-showdown'
 app.component require('../../components/code-editor')
 app.component require('../../components/code-renderer')
-app.component require('../../components/cypher')
 
 app.loadViews __dirname + '/views'
 app.loadStyles __dirname + '/styles'
@@ -31,7 +30,8 @@ app.get '*', (page, model, params, next) ->
 app.get '/', (page, model) ->
 
   roomQuery = model.query 'rooms', {$limit: 20}
-  roomQuery.subscribe ->
+  userQuery = model.query 'users', {}
+  model.subscribe roomQuery, userQuery, ->
     roomQuery.ref "_page.rooms"
     page.render 'home'
 
@@ -47,10 +47,13 @@ app.proto.addRoom = () ->
   console.log "adding room"
   model.add "rooms",
     name: "just another room"
-    user:
-      id: model.get "_session.user.id"
-      name: model.get "_session.user.github.username"
+    md: "# my room"
+    data:
+      text: "{answer: 42}"
+      type: "json"
+    userId: model.get "_session.user.id"
 
 
 
 require './src/room'
+require './src/cypher'

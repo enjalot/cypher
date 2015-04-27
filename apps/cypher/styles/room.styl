@@ -1,6 +1,7 @@
 // ROOM
 
-roomHeight = 650px
+headerHeight = 60px
+roomHeight = 450px
 
 .room
   //.new-cypher
@@ -10,6 +11,12 @@ roomHeight = 650px
   a:hover
     color: black
 
+  .room-nav
+    position:absolute
+    top: 0
+    left: 100px
+    line-height: headerHeight
+
   background-color: #e2e8e9
     
   .room-expand
@@ -17,31 +24,75 @@ roomHeight = 650px
     overflow: auto
   .room-content
     max-height: roomHeight
-    overflow: none
+    overflow: hidden
 
-    .primary-cypher
-      width: 640px
-      height: roomHeight
-      float: left
 
     .right-wrapper
-      width: calc(100% - 650px)
+      width: 49%
       border: 1px solid green
-      float:left
+      float: right
       height: roomHeight
 
+      iframe
+        min-height: 300px
+
     .description
-      width: 100%
+      width: 49%
       height: 100%
       color: black
       float: left
 
+    .description-text
+      padding: 10px
+      font-family: "Source Sans Pro"
+
+    .data
+      margin: 10px
+      width: 100%
+      textarea
+        width: 100% 
+        min-height: 200px
+
+      .preview
+        width: 100%
+        overflow: hidden;
+        text-overflow: ellipsis; 
+
+
+    .primary-cypher
+      margin: 10px auto
+      width: 420px
+      height: 315px
+      float: left
+      clear:left
+
     .video
-      display: inline-block
-      float:right
+      margin: 10px auto
+      width: 420px
+      height: 315px
+      clear:left
+      float:left
 
+    .name
+      margin: 5px
+      color: red
+      float:left
+      clear:left
 
+    .btn
+      margin: 5px
+      padding: 5px
+      text-decoration: none
+      color: blue
 
+    .tabs
+      float:left
+      clear:left
+    .active
+      background: white
+      color: green
+
+      
   .room-cypher
     float:left
     margin: 5px
@@ -53,7 +104,6 @@ roomHeight = 650px
 
     .make-primary
       float: right
-      
 
   .cyphers
     width: 100%
@@ -68,6 +118,6 @@ roomHeight = 650px
       width: 600px
       height: 600px
       transform: scale(0.5)translate(-50%, -50%)
-
-    .iframe
+    iframe
       min-height: 0
+

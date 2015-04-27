@@ -1,0 +1,110 @@
+headerHeight = 80px
+
+editorHeight = calc(100% - 6px)
+
+.cypher
+  width: 100%
+  height: 100%
+  position:absolute
+
+  .room-nav
+    position:absolute
+    top: -80px
+    left: 100px
+    line-height: headerHeight
+
+  //.presences
+  .presence
+    img
+      width: 30px
+
+.single-cypher
+  color steelblue
+  position: absolute
+  top: 0px
+  margin: 0
+  margin-top: headerHeight
+  padding: 0
+  //display: flex
+  height: calc(100% - 100px)
+  width: 100%
+
+  .cypher-container
+    width: 100%
+    height: 100%
+
+  .cypher-name
+    position: absolute
+    top: -60px
+    line-height: headerHeight
+  .tabs
+    top: -15px
+    left: 200px
+
+  .component-renderer
+    float: left
+    width: 50%
+    height: calc(100% - 20px)
+
+  .right-wrapper
+    position: absolute
+    top: 0
+    right: 0
+    width: 49%
+    height: 100%
+  
+  .code-editor
+    position: absolute
+    width: 100%
+    height: editorHeight
+    top: 0px
+    bottom: 0
+    .tabs
+      position:absolute
+      top: -40px
+
+    .editor-container
+      position: absolute
+      top: 0px
+      width: 100%
+      height: editorHeight
+    .d-codemirror
+      height: editorHeight
+    .CodeMirror
+      min-height: 100%
+    .CodeMirror-gutters
+      min-height: 100%
+
+  .presences
+    position:fixed
+    bottom: 0
+    height: 40px
+    width: 100%
+    background: #e0e0e0
+
+    .presence
+      background: #f4f4f4
+      float: left
+      margin: 5px
+      height: 30px
+      span
+        color: #050505
+        display:block
+        float:right
+        padding: 0px 10px
+        height: 30px
+        line-height: 24px
+
+    .editor
+      border-bottom: 3px solid black
+
+    .inactive
+      opacity: 0.5
+      span
+        color: #a9a9a9
+    
+    .show-cursors
+      line-height: 40px
+      float:right
+      margin-right: 10px
+

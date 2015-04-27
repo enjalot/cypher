@@ -2,7 +2,7 @@
   <h1>Cypher</h1>
   rooms:<br>
   {{each _page.rooms as #room}}
-    {{#room.user.name}}'s room: <a href="/room/{{#room.id}}">{{#room.name}}</a>
+    {{users[#room.userId].github.username}}'s room: <a href="/room/{{#room.id}}">{{#room.name}}</a>
     <br>
   {{/each}}
   <br>

@@ -7,11 +7,25 @@
         </div>
       {{/each}}
     </div>
-    <div class="editor-container">
+    <div class="editor-container {{if @readOnly}}read-only{{/if}}">
     {{on active}}
       {{with @code[active] as #text}}
-      <view name="d-codemirror" text="{{#text}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: getMode(active), readOnly: @readOnly } }}"></view> 
+      <view name="d-codemirror" as="editor" text="{{#text}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: getMode(active), readOnly: @readOnly } }}"></view> 
       {{/}}
     {{/}}
+    </div>
+    <div class="cursors">
+    <!-- we force rerender these because interaction 
+    with codemirror makes this a little iffy -->
+    {{on active}}
+      {{each presences as #presence}}
+        {{if #presence.userId != #root._session.userId}}
+          <div id="cursor-{{#presence.id}}" class="cursor" style="opacity:{{if @showCursors}}1{{else}}0 {{/if}}">
+            <pre class="line">&nbsp;</pre>
+            <img class="avatar" src="{{#root.users[#presence.userId].github._json.avatar_url}}">
+          </div>
+        {{/if}}
+      {{/each}}
+    {{/on}}
     </div>
   </div>

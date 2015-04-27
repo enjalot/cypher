@@ -43,22 +43,15 @@ module.exports = class CodeRenderer
 
   create: () ->
     ###
-    Usually this is a dangerous combination, and you shouldn't use it in
-    untrusted environments. It would be safer if we could take off allow-same-origin
-    but it's useful for 2 reasons. #1 derby-standalone doesn't work in a sandboxed iframe
-    because it tries to take over the window.history and the browser complains. I'm pretty sure
-    that could be made optional.
-    2nd reason is that we can reach up and pull data right out of the main admin2 context. I'm passing in
-    some data/code by creating a big string, which gets expensive if you make the string bigger.
-    Directly referencing the data is nice and fast, the proper way would be postMessage but again, since
-    this is a trusted environment we should take advantage of it
+      We allow the iframe to run scripts but not access the parent.
+      This means malicious user scripts 
     ###
     @inner.sandbox = "allow-scripts"
 
     @runCode()
     # when the code changes lets rebuild the iframe
     @code.on("change", "**", @runCode.bind(@))
-    @data.on("all", "**", @runCode.bind(@))
+    @data.on("change", "**", @runCode.bind(@))
     @libs.on("change", "**", @runCode.bind(@))
     @styles.on("change", "**", @runCode.bind(@))
 
@@ -73,20 +66,24 @@ module.exports = class CodeRenderer
     for style in styles when style
       t += "<link rel='stylesheet' href='#{lib}'></link>"
 
+    data = @data.get() or {}
+    if data.type == "json"
+      DATA = '<script charset="UTF-8">var data = ' + data.text + '</script>'
+    else if data.type == "csv"
+      DATA = '<script charset="UTF-8">var data = d3.csv.parse(' + JSON.stringify(data.text) + ');</script>'
+    else
+      DATA = ""
+
+
+    CODE = "<script>var module = {}; function Component() {};\n" + code.js + "</script>"
+
     t += "<style>\n" + code.css + "\n</style>" +
       TEMPLATEBODY + 
       code.html +
       ENDCUSTOM + 
-      '<script charset="UTF-8">var data = ' +
-      JSON.stringify(@data.get()).replace(/\u2028/g, '') +
-
-      "</script>" +
-      "<script>var module = {}; function Component() {};\n" + 
-      code.js + 
-      "</script>" +
+      DATA + 
+      CODE + 
       ENDTEMPLATE 
-
-    #console.log("template", t);
 
     #remove the last instance
     window.URL.revokeObjectURL(@blobUrl.get())

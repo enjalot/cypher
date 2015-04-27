@@ -1,52 +1,100 @@
 <index:>
   <div class="room-nav">
-    <div class="name">Room: <input value="{{#root.rooms[#root._page.room].name}}"></div>
-    <br>
-    {{if canCreateCypher()}}
-    <div class="new-cypher">
-      <button on-click="addCypher()">new cypher</button>
+    <div class="name">Room:&nbsp; 
+      {{if canEdit()}}
+      <input value="{{#root.rooms[#root._page.roomId].name}}">
+      {{else}}
+        {{#root.rooms[#root._page.roomId].name}}
+      {{/if}}
     </div>
-    {{/if}}
+    <br>
   </div>
   <div class="room-content">
-    <div class="primary-cypher">
+    <div class="description">
+      {{if canEdit()}}
+        <a class="btn" on-click="edit('description')">Edit description</a>
+      {{/if}}
+      <div class="description-text">
+      {{if editing.description}}
+        <view name="d-codemirror" text="{{room.md}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: 'markdown' } }}"></view> 
+      {{/if}}
+      {{unescaped room.description}}
+      </div>
+      
+      <div class="data">
+        {{if canEdit()}}
+          {{if editing.data}}
+            <a class="btn" on-click="save('data')">Save data</a>
+          {{else}}
+            <a class="btn" on-click="edit('data')">Edit data</a>
+          {{/if}}
+        {{/if}}
+        <br>
+        type: 
+        {{if editing.data}}
+          <select as="select">
+            {{each dataTypes as #option}}
+              <option value="{{#option}}" selected="{{room.data.type == #option}}">
+              {{#option}}
+              </option>
+            {{/each}}
+          </select>
+        {{else}}
+          {{room.data.type}}
+        {{/if}}
+        {{if editing.data}}
+         <textarea>{{preview}}</textarea>
+        {{/if}}
+        <pre class="preview">
+          {{room.data.text}}
+        </pre>
+      </div>
+    </div>
+    <div class="right-wrapper">
+      <div class="name">
+      <a class="name" href="/room/{{#root._page.roomId}}/{{primary.id}}">
+          {{primary.name}} - by {{#root.users[primary.userId].github.username}}
+      </a>
+      </div>
+      <div class="video {{if selectedTab !== 'video'}}hidden{{/if}}">
+        {{if room.video}}
+          <iframe width="420" height="315" src="{{room.video}}" frameborder="0" allowfullscreen></iframe>      
+        {{else}}
+          No video. 
+          {{if canEdit()}}
+          <br>Add a youtube embed URL: <input value="{{room.video}}">
+          {{/if}}
+        {{/if}}
+      </div>
+      <div class="primary-cypher {{if selectedTab !== 'primary'}}hidden{{/if}}">
         <view is="code-renderer"
           code="{{primary.code}}"
+          data="{{room.data}}"
           libs="{{primary.libs}}"
           styles="{{primary.styles}}">
         </view>
-    </div>
-    <div class="right-wrapper">
-      {{if canEdit()}}
-        <a on-click="edit()">Edit</a>
-      {{/if}}
-      <div class="description">
-        {{if editing}}
-          <view name="d-codemirror" text="{{room.md}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: 'markdown' } }}"></view> 
-        {{/if}}
-        {{if room.video}}
-          <div class="video">
-            <iframe width="420" height="315" src="{{room.video}}" frameborder="0" allowfullscreen></iframe>      
-          </div>
-        {{/if}}
-          <view is="d-showdown" text="{{room.md}}" html="{{room.description}}" options="{{ {} }}"></view>
-        {{unescaped room.description}}
       </div>
+      <view is="d-showdown" text="{{room.md}}" html="{{room.description}}" options="{{ {} }}"></view>
+      <div class="tabs">
+        <a class="btn tab {{if selectedTab == 'video'}}active{{/if}}" on-click="selectTab('video')">Video</a>
+        <a class="btn tab {{if selectedTab == 'primary'}}active{{/if}}" on-click="selectTab('primary')">Preview</a>
+      </div> 
     </div>
   </div>
   <div class="cyphers">
     {{each cyphers as #cypher}}
       {{if #cypher.id !== room.primaryId}}
       <div class="room-cypher" >
-        <a class="name" href="/room/{{#root._page.room}}/{{#cypher.id}}">
-          {{#cypher.name}} - by {{#cypher.user.name}}
+        <a class="name" href="/room/{{#root._page.roomId}}/{{#cypher.id}}">
+          {{#cypher.name}} - by {{#root.users[#cypher.userId].github.username}}
         </a>
-        {{if roomIsMine(#cypher.user.id)}}
+        {{if roomIsMine(#cypher.userId)}}
           <a class="make-primary" on-click="makePrimary(#cypher)">primary</a>
         {{/if}}
         <div class="cypher-thumb">
           <view is="code-renderer"
           code="{{#cypher.code}}"
+          data="{{room.data}}"
           libs="{{#cypher.libs}}"
           styles="{{#cypher.styles}}">
           </view>
@@ -56,15 +104,3 @@
     {{/each}}
   </div>
   
-  <!--
-  {{if #root._page.cypher}}
-    <view is="cypher" cypher="{{#root._page.cypher}}"></view>
-  {{/if}}
-  -->
-
-
-<single-cypher:>
-  <div class="room-nav">
-    <a href="/room/{{room.id}}">{{room.name || "room"}}</a>
-  </div>
-  <view is="cypher" cypher="{{#root._page.cypher}}"></view>

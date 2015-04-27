@@ -1,28 +1,36 @@
 app = require '../'
 
-app.get '/room/:room', (page, model, {room}, next) ->
-  return page.redirect '/lobby' unless room && /^[a-zA-Z0-9_-]+$/.test room
-  model.set '_page.room', room
+FIFTEEN = 1000 * 60 * 15
 
-  $room = model.at "rooms.#{room}"
+app.get '/room/:roomId', (page, model, {roomId}, next) ->
+  return page.redirect '/lobby' unless roomId && /^[a-zA-Z0-9_-]+$/.test roomId
+  model.set '_page.roomId', roomId
+
+  $room = model.at "rooms.#{roomId}"
+
+  usersQuery = model.query "users", {}
 
   cypherQuery = model.query 'cyphers',
-    room: room
+    roomId: roomId
 
-  model.subscribe $room, cypherQuery, ->
+  presenceQuery = model.query 'presence',
+    roomId: roomId
+    lastSeenAt: {$gt: +new Date() - FIFTEEN}
+
+  model.subscribe $room, cypherQuery, presenceQuery, usersQuery, ->
+    console.log "IN SUB", $room.get()
     if !$room.get()
-      $room.set
+      console.log "no room", roomId
+      model.add "rooms",
+        _id: roomId
         name: "just another room"
-        user:
-          id: model.get "_session.user.id"
-          name: model.get "_session.user.github.username"
+        userId: model.get "_session.user.id"
 
     if !cypherQuery.get().length and model.get "_session.loggedIn"
+      console.log "no cyphers?"
       cypherId = model.add "cyphers", {
-        room: room
-        user:
-          id: model.get "_session.user.id"
-          name: model.get "_session.user.github.username"
+        roomId: roomId
+        userId: model.get "_session.user.id"
         code:
           js: 'console.log("hi")'
           html: '<div class="custom">cool</div>'
@@ -32,41 +40,37 @@ app.get '/room/:room', (page, model, {room}, next) ->
 
     if cypherQuery.get().length == 1
       cypherId = cypherQuery.get()[0]?.id
+      console.log "cypher id11", cypherId
       model.ref "_page.cypher", model.at "cyphers.#{cypherId}"
 
     page.render 'room'
 
 
-app.get '/room/:room/:cypher', (page, model, {room,cypher}, next) ->
-  return page.redirect '/lobby' unless room && /^[a-zA-Z0-9_-]+$/.test room
-  model.set '_page.room', room
-  model.set '_page.cypherId', cypher
-  model.ref "_page.cypher", "cyphers.#{cypher}"
-
-
-  cypherQuery = model.query 'cyphers',
-    _id: cypher
-    room: room
-
-  model.subscribe cypherQuery, "rooms.#{room}", ->
-    page.render 'room:single-cypher'
-
 
 class Room
   init: ->
-    console.log "init"
+    @room = @model.at "room"
+    @cyphers = @model.at "cyphers"
+    @primary = @model.at "primary"
+    @preview = @model.at "preview"
+    @selectedTab = @model.at "selectedTab"
+    @selectedTab.setNull "primary"
     filter = @model.filter @model.scope("cyphers"), (cypher) ->
       return true
     @model.ref "cyphers", filter
-    room = @model.root.get "_page.room"
-    @model.ref "room", @model.scope("rooms.#{room}")
-    #if @model.get("cyphers").length == 1
-    #  @model.set "room.primaryId", @model.get("cyphers")[0]
+    roomId = @model.root.get "_page.roomId"
+    @model.ref "room", @model.scope("rooms.#{roomId}")
+    @room.setNull "md", ""
+    @model.set "dataTypes", ["csv", "json"]
+    @preview.setNull @room.get("data.text") or ""
+
     if primaryId = @model.get "room.primaryId"
       @model.ref "primary", @model.scope("cyphers.#{primaryId}")
     @model.on "change", "room.primaryId", (primaryId) =>
-      console.log 'changed', primaryId
       @model.ref "primary", @model.scope("cyphers.#{primaryId}")
+    if !primaryId and cypherId = @cyphers.get()?[0]?.id
+      @model.set "room.primaryId", cypherId
+
 
   create: ->
     console.log "create"
@@ -75,7 +79,11 @@ class Room
     @model.set "room.primaryId", cypher.id if cypher?.id
 
   roomIsMine: ->
-    return @model.get("room.user.id") == @model.root.get("_session.userId")
+    return @model.get("room.userId") == @model.root.get("_session.userId")
+
+  selectTab: (tab) ->
+    console.log "tab", tab
+    @selectedTab.set tab
 
   canCreateCypher: ->
     session = @model.root.get("_session") or {}
@@ -90,35 +98,19 @@ class Room
   canEdit: ->
     session = @model.root.get("_session") or {}
     return false unless session.loggedIn
-    return false unless session.user?.id == @model.get("room.user.id")
+    return false unless session.user?.id == @model.get("room.userId")
     return true
 
-  edit: ->
+  edit: (thing) ->
     return unless @canEdit()
-    editing = !@model.get "editing"
-    @model.set "editing", editing
+    editing = !@model.get "editing.#{thing}"
+    @model.set "editing.#{thing}", editing
+
+  save: (thing) ->
+    return unless @canEdit()
+    @room.set "data.text", @preview.get()
+    @model.set "editing.#{thing}", false
+
 
 
 app.component 'room', Room
-
-class SingleCypher
-  init: ->
-    console.log "sc init"
-    roomId = @model.root.get("_page.room")
-    console.log "room id", roomId, @model.root.get("rooms.#{roomId}")
-    @model.set "room", @model.root.get("rooms.#{roomId}")
-    #@model.ref @model.scope("rooms.#{roomId}"), "room"
-
-
-    ###
-    @model.ref @model.scope("cyphers.#{cypherId}")
-    @model.start "cypher", @model.scope("cyphers"), (cyphers) ->
-      for id,cypher of cyphers when cypher
-        return cypher
-    ###
-
-  create: ->
-    console.log "sc create"
-
-
-app.component 'room:single-cypher', SingleCypher

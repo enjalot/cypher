@@ -1,0 +1,78 @@
+<index:>
+  <div class="single-cypher">
+    <div class="room-nav">
+      <a href="/room/{{room.id}}">{{room.name || "room"}}</a>
+    </div>
+    <div class="cypher-container">
+      <view is="code-renderer"
+        code="{{cypher.code}}"
+        libs="{{cypher.libs}}"
+        data="{{room.data}}"
+        styles="{{cypher.styles}}">
+      </view>
+
+      <div class="right-wrapper">
+        <div class="extras">
+          <div class="cypher-name">
+            {{if canEdit()}}
+            <input value="{{cypher.name}}" placeholder="cypher name" title="name">
+            {{else}}
+              {{cypher.name}}
+            {{/if}}
+            <a class="btn" on-click="forkCypher(cypher)">Fork</a>
+          </div>
+          {{if addLibs}}
+          <view is="libs" styles="{{cypher.libs}}"></view>
+          {{/if}}
+          <!-- <view is="styles" styles="{{cypher.styles}}"></view> -->
+        </div>
+        <view is="code-editor"
+          code="{{cypher.code}}"
+          read-only="{{readOnly}}"
+          presences="{{presences}}"
+          on-cursor="cursorHandler()"
+          show-cursors="{{showCursors}}">
+        </view>
+      </div>
+    </div>
+    <view is="presences"></view>
+  </div>
+
+<presences:>
+  <div class="presences">
+    {{each presences as #presence}}
+      <div class="presence {{if isEditor(#presence)}}editor{{/if}}" >
+        <a href="/users/#presence.userId" class="{{if inActive(#presence)}}inactive{{/if}}">
+          <img class="avatar" src="{{#root.users[#presence.userId].github._json.avatar_url}}">
+          <span>
+          {{#root.users[#presence.userId].github.username}}
+          </span>
+        </a>
+      </div>
+    {{/each}}
+
+    <div class="show-cursors">
+      <a on-click="toggle('showCursors')">
+      {{if showCursors}}
+        Hide
+      {{else}}
+        Show
+      {{/if}}
+       &nbsp; cursors 
+      </a>
+    </div>
+  </div>
+
+<libs:>
+  Library URLS:
+  {{each cypher.libs as #lib}}
+    <input value="{{#lib}}">
+  {{/each}}
+  <button class="plus" on-click="addLib()">+ lib</button>
+
+<styles:>
+  Stylesheet URLS:
+  {{each cypher.styles as #style}}
+    <input value="{{#style}}">
+  {{/each}}
+  <button class="plus" on-click="addStyle()">+ style</button>
