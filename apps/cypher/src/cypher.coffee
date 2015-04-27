@@ -74,7 +74,7 @@ module.exports = class Cypher
     filter.sort (a,b) ->
       #diff = roundDown(b.lastSeenAt) - roundDown(a.lastSeenAt)
       #return diff
-      return a.userId - b.userId
+      return a?.userId - b?.userId
     @model.ref "presences", filter
 
 
@@ -108,6 +108,7 @@ module.exports = class Cypher
     @presence.set "lastSeenAt", +new Date
 
   isEditor: (presence) ->
+    return false unless presence
     return true if @cypher.get("userId") == presence.userId
     editors = @cypher.get("editors") or []
     return true if editors.indexOf(presence.userId) >= 0
@@ -127,7 +128,6 @@ module.exports = class Cypher
     delete copy.id
     copy.userId = user.id
 
-    console.log "copy", copy
     copyId = @model.root.add "cyphers", copy
     @app.history.push "/room/#{copy.roomId}/#{copyId}"
 
