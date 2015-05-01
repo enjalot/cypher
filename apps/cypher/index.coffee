@@ -29,10 +29,10 @@ app.get '*', (page, model, params, next) ->
 
 app.get '/', (page, model) ->
 
-  roomQuery = model.query 'rooms', {$limit: 20}
+  trackQuery = model.query 'tracks', {$limit: 20}
   userQuery = model.query 'users', {}
-  model.subscribe roomQuery, userQuery, ->
-    roomQuery.ref "_page.rooms"
+  model.subscribe trackQuery, userQuery, ->
+    trackQuery.ref "_page.tracks"
     page.render 'home'
 
 app.get '/login', (page) ->
@@ -44,10 +44,10 @@ app.get '/register', (page) ->
 app.proto.addRoom = () ->
   model = app.model
   return unless model.get "_session.loggedIn"
-  console.log "adding room"
-  model.add "rooms",
-    name: "just another room"
-    md: "# my room"
+  console.log "adding track"
+  model.add "tracks",
+    name: "just another track"
+    md: "# my track"
     data:
       text: "{answer: 42}"
       type: "json"
@@ -55,5 +55,5 @@ app.proto.addRoom = () ->
 
 
 
-require './src/room'
+require './src/track'
 require './src/cypher'

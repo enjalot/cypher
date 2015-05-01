@@ -1,5 +1,5 @@
 <import: src='./home'>
-<import: src='./room'>
+<import: src='./track'>
 <import: src='./cypher'>
 <import: src='./login'>
 
@@ -19,12 +19,17 @@
 
 
 <header:>
+  <div class="header-bg"></div>
   <div class="nav-header">
-    <a class="nav-link" href="/">Home</a>
+    <a class="nav-link" href="/">Cypher</a>
     {{if !_session.loggedIn}}
      <a class="login nav-link" href="/auth/github?next={{$render.url}}">login</a>
      {{else}}
      <a class="logout nav-link" href="/auth/logout">logout</a>
+     <a class="username nav-link" href="#">
+       <img class="avatar" src="{{_session.user.github._json.avatar_url}}">
+       <span>{{_session.user.github.username}}</span>
+      </a>
     {{/if}}
   </div>
 

@@ -3,9 +3,9 @@ app = require '../'
 MINUTE = 1000 * 60
 ACTIVE = 5 * MINUTE
 
-app.get '/room/:roomId/:cypherId', (page, model, {roomId,cypherId}, next) ->
-  return page.redirect '/lobby' unless roomId && /^[a-zA-Z0-9_-]+$/.test roomId
-  model.set '_page.roomId', roomId
+app.get '/track/:trackId/:cypherId', (page, model, {trackId,cypherId}, next) ->
+  return page.redirect '/lobby' unless trackId && /^[a-zA-Z0-9_-]+$/.test trackId
+  model.set '_page.trackId', trackId
   model.set '_page.cypherId', cypherId
   model.ref "_page.cypher", "cyphers.#{cypherId}"
 
@@ -13,23 +13,23 @@ app.get '/room/:roomId/:cypherId', (page, model, {roomId,cypherId}, next) ->
 
   cypherQuery = model.query 'cyphers',
     _id: cypherId
-    roomId: roomId
+    trackId: trackId
 
   userId = model.get "_session.userId"
   userPresenceQuery = model.query 'presence',
-    roomId: roomId
+    trackId: trackId
     cypherId: cypherId
     userId: userId
 
   cypherPresenceQuery = model.query 'presence',
-    roomId: roomId
+    trackId: trackId
     cypherId: cypherId
 
-  model.subscribe usersQuery, cypherQuery, userPresenceQuery, cypherPresenceQuery, "rooms.#{roomId}", ->
+  model.subscribe usersQuery, cypherQuery, userPresenceQuery, cypherPresenceQuery, "tracks.#{trackId}", ->
     if !userPresenceQuery.get()?.length and model.get "_session.loggedIn"
       # no presence for this user yet, create one
       presenceId = model.add "presence",
-        roomId: roomId
+        trackId: trackId
         cypherId: cypherId
         userId: userId
         lastSeenAt: +new Date
@@ -54,12 +54,12 @@ module.exports = class Cypher
     authorId = @cypher.get("userId")
     @readOnly.set authorId != userId
 
-    @room = @model.at "room"
+    @track = @model.at "track"
     @presence = @model.at "presence"
 
-    roomId = @model.root.get("_page.roomId")
-    console.log "room id", roomId, @model.root.get("rooms.#{roomId}")
-    @room.set @model.root.get("rooms.#{roomId}")
+    trackId = @model.root.get("_page.trackId")
+    console.log "track id", trackId, @model.root.get("tracks.#{trackId}")
+    @track.set @model.root.get("tracks.#{trackId}")
     presenceId = @model.root.get("_page.presenceId")
     if presenceId
       @model.ref "presence", @model.scope("presence.#{presenceId}")
@@ -116,6 +116,7 @@ module.exports = class Cypher
 
   canEdit: ->
     session = @model.root.get("_session") or {}
+    return true if @cypher.get("hyphy")
     return false unless session.loggedIn
     return false unless session.user?.id == @cypher.get("userId")
     return true
@@ -129,7 +130,7 @@ module.exports = class Cypher
     copy.userId = user.id
 
     copyId = @model.root.add "cyphers", copy
-    @app.history.push "/room/#{copy.roomId}/#{copyId}"
+    @app.history.push "/track/#{copy.trackId}/#{copyId}"
 
 
 app.component 'cypher', Cypher

@@ -1,9 +1,9 @@
-// ROOM
+// track
 
-headerHeight = 60px
-roomHeight = 450px
+headerHeight = 80px
+trackHeight = 450px
 
-.room
+.track
   //.new-cypher
   a,a:visited
     color: black
@@ -11,19 +11,22 @@ roomHeight = 450px
   a:hover
     color: black
 
-  .room-nav
+  .track-nav
     position:absolute
     top: 0
     left: 100px
     line-height: headerHeight
+    color: cyellow
+    font-weight: bold
+    font-family: Roboto
 
   background-color: #e2e8e9
     
-  .room-expand
+  .track-expand
     max-height: 100%
     overflow: auto
-  .room-content
-    max-height: roomHeight
+  .track-content
+    max-height: trackHeight
     overflow: hidden
 
 
@@ -31,7 +34,7 @@ roomHeight = 450px
       width: 49%
       border: 1px solid green
       float: right
-      height: roomHeight
+      height: trackHeight
 
       iframe
         min-height: 300px
@@ -93,7 +96,7 @@ roomHeight = 450px
       color: green
 
       
-  .room-cypher
+  .track-cypher
     float:left
     margin: 5px
     padding: 15px

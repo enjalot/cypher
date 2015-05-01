@@ -1,5 +1,87 @@
 
-
 .home
-  h1
-    color: red
+  overflow: hidden
+  .description
+    margin: 0
+    height: 200px
+    width: 100%
+    display: inline-block
+    text-align: center
+
+    .description-bg
+      background-image: url("/img/graff.png")
+      width: 100%
+      height: 200px
+      position:absolute
+
+    .content
+      background: rgba(74, 168, 226, 0.8) //cblue
+      height: 200px
+      width: 100%
+      display: inline-block
+
+
+    h1
+      margin-top: 60px
+      color: cyellow
+    p
+      color: cblueDarkest
+
+
+  .tracks
+    margin: 0
+    margin-top: -5px
+    background: cblueLight
+    height: calc(100% - 260px)
+    width: 100%
+    display: inline-block
+    overflow: auto
+
+    .add-track
+      color: cred
+      float: right
+      margin-right: 35px
+      border: none
+      padding: 0
+    .add-track:hover
+      color: cblueDark
+
+    .notes
+      font-size: 12px
+      font-color: cgrayDark
+      max-width: 700px
+
+    h2
+      padding-left: 35px
+
+    p
+      padding-left: 35px
+
+    .tracks-container
+      padding-left: 30px
+      position:relative
+
+    .track-link
+      height: 50px
+      width: 200px
+      overflow: hidden
+      max-width: 100%
+      background-color: cblueDark
+      padding: 10px
+      border-radius: 2px
+      display:inline-block
+      margin: 5px
+      vertical-align: top
+
+      a, a:visited
+        color: cyellow
+        border: none
+        width: 100%
+        height: 100%
+        display:block
+
+      .avatar
+        float: right
+        margin-top: 0px
+
+

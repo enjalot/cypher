@@ -1,13 +1,13 @@
 <index:>
   <div class="single-cypher">
-    <div class="room-nav">
-      <a href="/room/{{room.id}}">{{room.name || "room"}}</a>
+    <div class="track-nav">
+      <a href="/track/{{track.id}}">{{track.name || "track"}}</a>
     </div>
     <div class="cypher-container">
       <view is="code-renderer"
         code="{{cypher.code}}"
         libs="{{cypher.libs}}"
-        data="{{room.data}}"
+        data="{{track.data}}"
         styles="{{cypher.styles}}">
       </view>
 

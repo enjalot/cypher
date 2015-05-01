@@ -2,35 +2,34 @@ app = require '../'
 
 FIFTEEN = 1000 * 60 * 15
 
-app.get '/room/:roomId', (page, model, {roomId}, next) ->
-  return page.redirect '/lobby' unless roomId && /^[a-zA-Z0-9_-]+$/.test roomId
-  model.set '_page.roomId', roomId
+app.get '/track/:trackId', (page, model, {trackId}, next) ->
+  return page.redirect '/lobby' unless trackId && /^[a-zA-Z0-9_-]+$/.test trackId
+  model.set '_page.trackId', trackId
 
-  $room = model.at "rooms.#{roomId}"
+  $track = model.at "tracks.#{trackId}"
 
   usersQuery = model.query "users", {}
 
   cypherQuery = model.query 'cyphers',
-    roomId: roomId
+    trackId: trackId
 
   presenceQuery = model.query 'presence',
-    roomId: roomId
+    trackId: trackId
     lastSeenAt: {$gt: +new Date() - FIFTEEN}
 
-  model.subscribe $room, cypherQuery, presenceQuery, usersQuery, ->
-    console.log "IN SUB", $room.get()
-    if !$room.get()
-      console.log "no room", roomId
-      model.add "rooms",
-        _id: roomId
-        name: "just another room"
+  model.subscribe $track, cypherQuery, presenceQuery, usersQuery, ->
+    if !$track.get()
+      model.add "tracks",
+        _id: trackId
+        name: "just another track"
         userId: model.get "_session.user.id"
+        createdAt: new Date()
 
     if !cypherQuery.get().length and model.get "_session.loggedIn"
-      console.log "no cyphers?"
       cypherId = model.add "cyphers", {
-        roomId: roomId
+        trackId: trackId
         userId: model.get "_session.user.id"
+        name: "mic check"
         code:
           js: 'console.log("hi")'
           html: '<div class="custom">cool</div>'
@@ -43,13 +42,13 @@ app.get '/room/:roomId', (page, model, {roomId}, next) ->
       console.log "cypher id11", cypherId
       model.ref "_page.cypher", model.at "cyphers.#{cypherId}"
 
-    page.render 'room'
+    page.render 'track'
 
 
 
-class Room
+class Track
   init: ->
-    @room = @model.at "room"
+    @track = @model.at "track"
     @cyphers = @model.at "cyphers"
     @primary = @model.at "primary"
     @preview = @model.at "preview"
@@ -58,28 +57,28 @@ class Room
     filter = @model.filter @model.scope("cyphers"), (cypher) ->
       return true
     @model.ref "cyphers", filter
-    roomId = @model.root.get "_page.roomId"
-    @model.ref "room", @model.scope("rooms.#{roomId}")
-    @room.setNull "md", ""
+    trackId = @model.root.get "_page.trackId"
+    @model.ref "track", @model.scope("tracks.#{trackId}")
+    @track.setNull "md", ""
     @model.set "dataTypes", ["csv", "json"]
-    @preview.setNull @room.get("data.text") or ""
+    @preview.setNull @track.get("data.text") or ""
 
-    if primaryId = @model.get "room.primaryId"
+    if primaryId = @model.get "track.primaryId"
       @model.ref "primary", @model.scope("cyphers.#{primaryId}")
-    @model.on "change", "room.primaryId", (primaryId) =>
+    @model.on "change", "track.primaryId", (primaryId) =>
       @model.ref "primary", @model.scope("cyphers.#{primaryId}")
     if !primaryId and cypherId = @cyphers.get()?[0]?.id
-      @model.set "room.primaryId", cypherId
+      @model.set "track.primaryId", cypherId
 
 
   create: ->
     console.log "create"
 
   makePrimary: (cypher) ->
-    @model.set "room.primaryId", cypher.id if cypher?.id
+    @model.set "track.primaryId", cypher.id if cypher?.id
 
-  roomIsMine: ->
-    return @model.get("room.userId") == @model.root.get("_session.userId")
+  trackIsMine: ->
+    return @model.get("track.userId") == @model.root.get("_session.userId")
 
   selectTab: (tab) ->
     console.log "tab", tab
@@ -98,7 +97,7 @@ class Room
   canEdit: ->
     session = @model.root.get("_session") or {}
     return false unless session.loggedIn
-    return false unless session.user?.id == @model.get("room.userId")
+    return false unless session.user?.id == @model.get("track.userId")
     return true
 
   edit: (thing) ->
@@ -108,9 +107,9 @@ class Room
 
   save: (thing) ->
     return unless @canEdit()
-    @room.set "data.text", @preview.get()
+    @track.set "data.text", @preview.get()
     @model.set "editing.#{thing}", false
 
 
 
-app.component 'room', Room
+app.component 'track', Track

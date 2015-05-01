@@ -1,4 +1,23 @@
-headerHeight = 60px
+headerHeight = 60
+halfHeader = headerHeight/2
+thirdHeader = headerHeight/3
+
+cred = #F2627C
+cblueDarkest = #445765
+cblueDark = #157EBF
+cblue = #4AA8E2
+cblueLight = #C8EBF3
+cgreen = #AFE274
+cyellow = #FFFFED
+
+cgrayLightest = #E9ECEF
+cgrayLight = #DBE0E5
+cgray = #A9AFB4
+cgrayMedium = #979A9E
+cgrayDark = #7D8185
+cgrayDarkest = #6C6D6E
+
+cblack = #192F41
 
 @import "../../../components/code-editor"
 @import "../../../components/code-renderer"
@@ -6,7 +25,7 @@ headerHeight = 60px
 
 
 @import "./home"
-@import "./room"
+@import "./track"
 @import "./cypher"
 
 
@@ -16,18 +35,58 @@ body
   padding: 0
   width: 100%
   height: 100%
+  color: cblack
+  position:absolute
 
+a, a:visited
+  color: cblueDarkest
+  font-weight: 700
+  text-decoration: none
+  border-bottom: 2px solid cgrayDarkest
+
+.header-bg
+  position: absolute
+  top:0
+  height: headerHeight
+  left:0
+  right:0
+  background-image: url("/img/header.png")
+  z-index: -2
 
 .nav-header
-  background-color: orange
+  background-color: rgba(25, 47, 65, 0.95) //cblack
   height: headerHeight
   z-index: -1
+  font-family: Roboto
+
+  a, a:visited
+    color: cyellow
+
+  a:hover
+    color: cgreen
+    img
+      border-bottom: 3px solid cgreen
 
   .nav-link
+    padding: 0px 15px
+    float: left
+    height: headerHeight
     line-height: headerHeight
-    background: red
+    //background: red
+    border: none
   .login
     float: right
+  .username
+    float: right
+    span
+      line-height: headerHeight
+      height: headerHeight
+      float:right
+  .avatar
+    float:left
+    height: halfHeader px
+    margin-top: 25px
+    margin-right: 10px
   .logout
     float: right
 

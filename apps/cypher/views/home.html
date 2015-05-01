@@ -1,14 +1,36 @@
 <index:>
-  <h1>Cypher</h1>
-  rooms:<br>
-  {{each _page.rooms as #room}}
-    {{users[#room.userId].github.username}}'s room: <a href="/room/{{#room.id}}">{{#room.name}}</a>
-    <br>
-  {{/each}}
-  <br>
-  {{if _session.loggedIn}}
-    <button on-click="addRoom()">add room</button>
-  {{/if}}
+  <div class="description">
+    <div class="description-bg">
+    <div class="content">
+      <h1>Freestyle prototyping</h1>
+      <p>Jump on a track with other hackers. Collaborate on visualizations, sharing datasets and code.
+      </p>
+    </div>
+  </div>
+  </div>
+
+  <div class="tracks">
+    <h2>Tracks</h2>
+    {{if _session.loggedIn}}
+      <a class="btn add-track" on-click="addRoom()">create a new track</a>
+    {{/if}}
+    <p class="notes">
+      Each track is managed by one person, who sets the tone and maybe a dataset for the coding. Collaborate or broadcast your code with others logged in. If you see something interesting, fork it and play with the idea in your own cypher.
+    </p>
+    
+    <div class="tracks-container">
+    {{each _page.tracks as #track}}
+      <div class="track-link">
+      <img class="avatar" src="{{users[#track.userId].github._json.avatar_url}}">
+      <a href="/track/{{#track.id}}">{{#track.name}}</a>
+      <br>
+      {{#track.createdAt}}
+
+      </div>
+    {{/each}}
+    </div>
+    
+  </div>
 
 
   

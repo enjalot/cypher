@@ -1,24 +1,24 @@
 <index:>
-  <div class="room-nav">
-    <div class="name">Room:&nbsp; 
+  <div class="track-nav">
+    <div class="name">
       {{if canEdit()}}
-      <input value="{{#root.rooms[#root._page.roomId].name}}">
+      <input value="{{#root.tracks[#root._page.trackId].name}}">
       {{else}}
-        {{#root.rooms[#root._page.roomId].name}}
+        {{#root.tracks[#root._page.trackId].name}}
       {{/if}}
     </div>
     <br>
   </div>
-  <div class="room-content">
+  <div class="track-content">
     <div class="description">
       {{if canEdit()}}
         <a class="btn" on-click="edit('description')">Edit description</a>
       {{/if}}
       <div class="description-text">
       {{if editing.description}}
-        <view name="d-codemirror" text="{{room.md}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: 'markdown' } }}"></view> 
+        <view name="d-codemirror" text="{{track.md}}" options="{{ { tabSize: 2, lineNumbers: true, inlet: true, mode: 'markdown' } }}"></view> 
       {{/if}}
-      {{unescaped room.description}}
+      {{unescaped track.description}}
       </div>
       
       <div class="data">
@@ -34,47 +34,47 @@
         {{if editing.data}}
           <select as="select">
             {{each dataTypes as #option}}
-              <option value="{{#option}}" selected="{{room.data.type == #option}}">
+              <option value="{{#option}}" selected="{{track.data.type == #option}}">
               {{#option}}
               </option>
             {{/each}}
           </select>
         {{else}}
-          {{room.data.type}}
+          {{track.data.type}}
         {{/if}}
         {{if editing.data}}
          <textarea>{{preview}}</textarea>
         {{/if}}
         <pre class="preview">
-          {{room.data.text}}
+          {{track.data.text}}
         </pre>
       </div>
     </div>
     <div class="right-wrapper">
       <div class="name">
-      <a class="name" href="/room/{{#root._page.roomId}}/{{primary.id}}">
+      <a class="name" href="/track/{{#root._page.trackId}}/{{primary.id}}">
           {{primary.name}} - by {{#root.users[primary.userId].github.username}}
       </a>
       </div>
       <div class="video {{if selectedTab !== 'video'}}hidden{{/if}}">
-        {{if room.video}}
-          <iframe width="420" height="315" src="{{room.video}}" frameborder="0" allowfullscreen></iframe>      
+        {{if track.video}}
+          <iframe width="420" height="315" src="{{track.video}}" frameborder="0" allowfullscreen></iframe>      
         {{else}}
           No video. 
           {{if canEdit()}}
-          <br>Add a youtube embed URL: <input value="{{room.video}}">
+          <br>Add a youtube embed URL: <input value="{{track.video}}">
           {{/if}}
         {{/if}}
       </div>
       <div class="primary-cypher {{if selectedTab !== 'primary'}}hidden{{/if}}">
         <view is="code-renderer"
           code="{{primary.code}}"
-          data="{{room.data}}"
+          data="{{track.data}}"
           libs="{{primary.libs}}"
           styles="{{primary.styles}}">
         </view>
       </div>
-      <view is="d-showdown" text="{{room.md}}" html="{{room.description}}" options="{{ {} }}"></view>
+      <view is="d-showdown" text="{{track.md}}" html="{{track.description}}" options="{{ {} }}"></view>
       <div class="tabs">
         <a class="btn tab {{if selectedTab == 'video'}}active{{/if}}" on-click="selectTab('video')">Video</a>
         <a class="btn tab {{if selectedTab == 'primary'}}active{{/if}}" on-click="selectTab('primary')">Preview</a>
@@ -83,18 +83,18 @@
   </div>
   <div class="cyphers">
     {{each cyphers as #cypher}}
-      {{if #cypher.id !== room.primaryId}}
-      <div class="room-cypher" >
-        <a class="name" href="/room/{{#root._page.roomId}}/{{#cypher.id}}">
+      {{if #cypher.id !== track.primaryId}}
+      <div class="track-cypher" >
+        <a class="name" href="/track/{{#root._page.trackId}}/{{#cypher.id}}">
           {{#cypher.name}} - by {{#root.users[#cypher.userId].github.username}}
         </a>
-        {{if roomIsMine(#cypher.userId)}}
+        {{if trackIsMine(#cypher.userId)}}
           <a class="make-primary" on-click="makePrimary(#cypher)">primary</a>
         {{/if}}
         <div class="cypher-thumb">
           <view is="code-renderer"
           code="{{#cypher.code}}"
-          data="{{room.data}}"
+          data="{{track.data}}"
           libs="{{#cypher.libs}}"
           styles="{{#cypher.styles}}">
           </view>
