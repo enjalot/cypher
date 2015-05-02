@@ -92,7 +92,14 @@ class Track
       return false if session.userId == cypher.user?.id
     return true
 
-  addCypher: ->
+  forkCypher: ->
+    session = @model.root.get("_session") or {}
+    return unless session.loggedIn
+    primaryCopy = @primary.getDeepCopy()
+    delete primaryCopy.id
+    primaryCopy.userId = session.user?.id
+    newId = @model.root.add "cyphers", primaryCopy
+    app.history.push "/track/#{@track.get('id')}/#{newId}"
 
   canEdit: ->
     session = @model.root.get("_session") or {}
@@ -101,7 +108,6 @@ class Track
     return true
 
   edit: (thing) ->
-    return unless @canEdit()
     editing = !@model.get "editing.#{thing}"
     @model.set "editing.#{thing}", editing
 

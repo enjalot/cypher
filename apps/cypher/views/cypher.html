@@ -12,6 +12,7 @@
       </view>
 
       <div class="right-wrapper">
+        {{on readOnly}}
         <view is="code-editor"
           code="{{cypher.code}}"
           read-only="{{readOnly}}"
@@ -20,6 +21,12 @@
           show-cursors="{{showCursors}}">
           <div class="extras">
             <div>
+              {{if canEdit()}}
+              <div on-click="toggle('cypher.hyphy')" class="hyphy {{if cypher.hyphy}}active{{/if}}" title="{{if cypher.hyphy}}[active]{{else}}[inactive]{{/if}} if active, any logged in user can edit at the same time.">
+               h
+              </div>
+              {{/if}}
+
               <span class="cypher-name">
               {{if canEdit()}}
               <input value="{{cypher.name}}" placeholder="cypher name" title="name">
@@ -36,6 +43,7 @@
             <!-- <view is="styles" styles="{{cypher.styles}}"></view> -->
           </div>
         </view>
+        {{/on}}
       </div>
     </div>
     <view is="presences"></view>
@@ -45,7 +53,7 @@
   <div class="presences">
     {{each presences as #presence}}
       <div class="presence {{if isEditor(#presence)}}editor{{/if}}" >
-        <a href="/users/#presence.userId" class="{{if inActive(#presence)}}inactive{{/if}}">
+        <a on-click="makeEditor(#presence)" class="{{if inActive(#presence)}}inactive{{/if}}">
           <img class="avatar" src="{{#root.users[#presence.userId].github._json.avatar_url}}">
           <span>
           {{#root.users[#presence.userId].github.username}}

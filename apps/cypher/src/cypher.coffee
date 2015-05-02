@@ -51,14 +51,28 @@ module.exports = class Cypher
     @libs.setNull []
     @readOnly = @model.at "readOnly"
     userId = @model.root.get("_session.userId")
+
     authorId = @cypher.get("userId")
-    @readOnly.set authorId != userId
+    session = @model.root.get "_session"
+    readOnly = authorId != userId
+    getReadOnly = =>
+      if @cypher.get("hyphy") or @isEditor({userId: session.user?.id})
+        return false
+      else
+        return readOnly
+
+    @cypher.on "change", "hyphy", =>
+      @readOnly.set getReadOnly()
+
+    @cypher.on "all", "editors", =>
+      @readOnly.set getReadOnly()
+
+    @readOnly.set getReadOnly()
 
     @track = @model.at "track"
     @presence = @model.at "presence"
 
     trackId = @model.root.get("_page.trackId")
-    console.log "track id", trackId, @model.root.get("tracks.#{trackId}")
     @track.set @model.root.get("tracks.#{trackId}")
     presenceId = @model.root.get("_page.presenceId")
     if presenceId
@@ -82,7 +96,7 @@ module.exports = class Cypher
     # presence timeout 
     setInterval =>
       @model.set "presence.lastSeenAt", +new Date()
-    , 1000
+    , 5000
 
   addStyle: ->
     @styles.push "https://"
@@ -113,6 +127,16 @@ module.exports = class Cypher
     editors = @cypher.get("editors") or []
     return true if editors.indexOf(presence.userId) >= 0
     return false
+
+  makeEditor: (presence) ->
+    session = @model.root.get("_session") or {}
+    return unless @cypher.get("userId") == session.user?.id
+    return unless presence
+    index = @cypher.get("editors").indexOf(presence.userId)
+    if index >= 0
+      @cypher.remove("editors", index)
+    else
+      @cypher.push("editors",presence.userId) 
 
   canEdit: ->
     session = @model.root.get("_session") or {}

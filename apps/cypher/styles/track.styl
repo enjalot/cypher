@@ -1,7 +1,7 @@
 // track
 
 headerHeight = 80px
-trackHeight = 370px
+trackHeight = 420px
 
 .track
   //.new-cypher
@@ -16,9 +16,6 @@ trackHeight = 370px
     font-family: Roboto
 
     
-  .track-expand
-    max-height: 100%
-    overflow: auto
 
   .track-content
     max-height: trackHeight
@@ -26,7 +23,14 @@ trackHeight = 370px
     background-color: cblueDark
 
     &.open
-      min-height: 100%
+      min-height: calc(100% - 100px)
+      transition: min-height 0.3s
+      .more
+        top: calc(100% - 55px)
+        transition: top 0.3s
+
+      .description
+        min-height: 100%
 
 
     .right-wrapper
@@ -45,12 +49,22 @@ trackHeight = 370px
       color: cyellow
       float: left
 
-      .btn
-        color: cgreen
-        padding: 0px
-        padding-left:5px
-        margin-top: 10px
-        float: right
+    .more
+      position:absolute
+      top: 465px
+      left: 50%
+      background: cyellow
+      padding: 5px
+      padding-top: 0
+
+
+    .btn
+      color: cgreen
+      padding: 0px
+      padding-left:5px
+      margin-top: 10px
+      margin-right: 10px
+      float: right
 
     .description-text
       padding: 10px
@@ -58,36 +72,25 @@ trackHeight = 370px
 
     .data
       margin-left: 10px
-      border-top: 1px solid cyellow
-      .btn
-        margin: 0
-        padding: 0
       textarea
         width: 100% 
         min-height: 200px
 
       .type
-        color: cgrayLight
+        color: cgrayLightest
 
       .preview
-        width: 100%
+        width: calc(100% - 15px)
         overflow: hidden;
         text-overflow: ellipsis; 
         padding-top: 5px
+        padding: 5px
+        background-color: cgrayLightest
 
       h1
         padding: 0
         margin: 0
         
-
-
-    .primary-cypher
-      //margin: 10px auto
-      width: 420px
-      height: 315px
-      float: left
-      clear:left
-
     .video
       //margin: 10px auto
       width: 420px
@@ -117,26 +120,66 @@ trackHeight = 370px
       background: cblue
       color: cyellow
 
-      
+
+  .add-cypher
+    float: left
+    width: 300px
+    height: 235px
+    display: block
+    font-size: 120px
+    cursor: pointer
+    text-align: center
+    line-height: 225px
+
   .track-cypher
     float:left
     margin: 5px
     padding: 15px
-    background: #f8f8f8
+    background: cgrayLight
+
+    .avatar
+      float:left
 
     .name
+      width: 300px
+      overflow:hidden
       line-height:45px
+      display:block
+      height: 35px
+      span.n
+        float:left
+        width: 250px
+        overflow:hidden
+        line-height:24px
+        height:27px
+        padding: 0px 5px
+
+      span.p
+        float:right
+        display:block
+        float:right
+        padding: 0px 10px
+        height: 30px
+        line-height: 24px
 
     .make-primary
+      display:inline-block
       float: right
+      margin-top: -50px
+      margin-right: -10px
 
   .cyphers
+    padding-top: 20px
     width: 100%
     height: 100%
     float: left
     clear: left
-    background-color: cblueLight
+    background-color: cyellow
 
+
+  .primary
+    background-color: cgray
+  
   .cypher-thumb
     width: 300px
     height: 200px

@@ -9,7 +9,7 @@
     </div>
     <br>
   </div>
-  <div class="track-content {{if editing.description || editing.data}}open{{/if}}">
+  <div class="track-content {{if editing.description || editing.data || editing.more}}open{{/if}}">
     <div class="description">
       {{if canEdit()}}
         <a class="btn" on-click="edit('description')">
@@ -26,7 +26,8 @@
         {{/if}}
         {{unescaped track.description}}
       </div>
-      
+    </div>
+    <div class="right-wrapper">
       <div class="data">
         {{if canEdit()}}
           {{if editing.data}}
@@ -55,49 +56,49 @@
         </pre>
       </div>
     </div>
-    <div class="right-wrapper">
-      <div class="name">
-        <a class="name" href="/track/{{#root._page.trackId}}/{{primary.id}}">
-          {{primary.name}} - by {{#root.users[primary.userId].github.username}}
-      </a>
-      </div>
-      <div class="tabs">
-        {{if track.video || track.userId === #root._session.userId}}
-        <a class="btn tab {{if selectedTab == 'video'}}active{{/if}}" on-click="selectTab('video')">Video</a>
-        {{/if}}
-        <a class="btn tab {{if selectedTab == 'primary'}}active{{/if}}" on-click="selectTab('primary')">Preview</a>
-      </div>
-      <div class="video {{if selectedTab !== 'video'}}hidden{{/if}}">
-        {{if track.video}}
-          <iframe width="420" height="315" src="{{track.video}}" frameborder="0" allowfullscreen></iframe>      
-        {{else}}
-          No video. 
-          {{if canEdit()}}
-          <br>Add a youtube embed URL: <input value="{{track.video}}">
-          {{/if}}
-        {{/if}}
-      </div>
-      <div class="primary-cypher {{if selectedTab !== 'primary'}}hidden{{/if}}">
-        <view is="code-renderer"
-          code="{{primary.code}}"
-          data="{{track.data}}"
-          libs="{{primary.libs}}"
-          styles="{{primary.styles}}">
-        </view>
-      </div>
-      <view is="d-showdown" text="{{track.md}}" html="{{track.description}}" options="{{ {} }}"></view>
-      
+    <view is="d-showdown" text="{{track.md}}" html="{{track.description}}" options="{{ {} }}"></view>
+    <div class="more">
+      {{if editing.more}}
+        <a class="btn" on-click="edit('more')">Less</a>
+      {{else}}
+        <a class="btn" on-click="edit('more')">More</a>
+      {{/if}}
     </div>
   </div>
   <div class="cyphers">
+    {{if #root._session.loggedIn}}
+    <div on-click="forkCypher()" class="track-cypher add-cypher">
+      +
+    </div>
+    {{/if}}
+
+    <div class="track-cypher primary" >
+      <a class="name" href="/track/{{#root._page.trackId}}/{{primary.id}}">
+        <img class="avatar" src="{{#root.users[primary.userId].github._json.avatar_url}}">
+        <span class="n">
+        {{primary.name}}
+        </span>
+      </a>
+      <div class="cypher-thumb">
+        <view is="code-renderer"
+        code="{{primary.code}}"
+        data="{{track.data}}"
+        libs="{{primary.libs}}"
+        styles="{{primary.styles}}">
+        </view>
+      </div>
+    </div>
     {{each cyphers as #cypher}}
-      {{if #cypher.id !== track.primaryId}}
-      <div class="track-cypher" >
+      {{if #cypher.id !== track.primaryId }}
+      <div class="track-cypher">
         <a class="name" href="/track/{{#root._page.trackId}}/{{#cypher.id}}">
-          {{#cypher.name}} - by {{#root.users[#cypher.userId].github.username}}
+          <img class="avatar" src="{{#root.users[#cypher.userId].github._json.avatar_url}}">
+          <span class="n">
+          {{#cypher.name}}
+          </span>
         </a>
-        {{if trackIsMine(#cypher.userId)}}
-          <a class="make-primary" on-click="makePrimary(#cypher)">primary</a>
+        {{if trackIsMine(#cypher.userId) && #cypher.id !== track.primaryId}}
+          <a class="make-primary" on-click="makePrimary(#cypher)">p</a>
         {{/if}}
         <div class="cypher-thumb">
           <view is="code-renderer"
