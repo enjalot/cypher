@@ -1,11 +1,13 @@
 editorHeight = 300px
-tabHeight = 25px
+tabHeight = 30px
 .code-editor
   .CodeMirror
     width: 100%
     min-height: editorHeight
   .CodeMirror-gutters
     min-height: editorHeight
+  .CodeMirror-scroll
+    height: calc(100% - 32px)
   .tabs
     margin: 5px
     height: tabHeight
@@ -16,28 +18,21 @@ tabHeight = 25px
       padding: 5px
       height: tabHeight
       cursor: pointer
+      border-radius: 3px
     .active
-      color: white
-      border-top: 1px solid white
-      border-right: 1px solid white
-      border-left: 1px solid white
+      color: cyellow
+      background-color: cblueDark
 
   .editor-container
     border: 1px solid tealLighter
     width: 100%
-    height: 100%
 
   .read-only
     .CodeMirror
-      opacity: 0.6  
-      background: repeating-linear-gradient(
-        125deg,
-        rgba(0, 0, 0, 0.14),
-        rgba(0, 0, 0, 0.1) 1px,
-        rgba(0, 0, 0, 0.1) 40px,
-        rgba(0, 0, 0, 0.1) 24px
-      )
-
+      //opacity: 0.6  
+      background: cgrayLightest
+      span,div,p,pre
+        cursor: default
 .cursors
   display: none
 

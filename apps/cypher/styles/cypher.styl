@@ -9,9 +9,16 @@ editorHeight = calc(100% - 6px)
 
   .track-nav
     position:absolute
-    top: -80px
+    top: -81px
     left: 100px
     line-height: headerHeight
+    a,a:visited
+      color: cyellow
+      font-weight: bold
+      font-family: Roboto
+      border: none
+    a:hover
+      color: cgreen
 
   //.presences
   .presence
@@ -19,7 +26,6 @@ editorHeight = calc(100% - 6px)
       width: 30px
 
 .single-cypher
-  color steelblue
   position: absolute
   top: 0px
   margin: 0
@@ -33,13 +39,28 @@ editorHeight = calc(100% - 6px)
     width: 100%
     height: 100%
 
-  .cypher-name
-    position: absolute
-    top: -60px
-    line-height: headerHeight
-  .tabs
-    top: -15px
-    left: 200px
+  .extras
+    margin-top: -40px
+    margin-left: 30px
+
+    .avatar
+      margin-top: 7px
+      float:left
+
+    .fork
+      color: cyellow
+      margin-left: 30px
+      background: cblueDark
+      padding: 10px
+    .fork:hover
+      color: cgreen
+
+    .cypher-name
+      margin-left: 5px
+      line-height: 40px
+
+
+
 
   .component-renderer
     float: left
@@ -52,16 +73,18 @@ editorHeight = calc(100% - 6px)
     right: 0
     width: 49%
     height: 100%
+    background-color: rgb(247, 247, 247)
   
   .code-editor
     position: absolute
     width: 100%
-    height: editorHeight
-    top: 0px
+    height: calc(100% - 46px)
+    top: 40px
     bottom: 0
     .tabs
       position:absolute
       top: -40px
+      right: 5px
 
     .editor-container
       position: absolute

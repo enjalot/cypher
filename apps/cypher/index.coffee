@@ -44,14 +44,14 @@ app.get '/register', (page) ->
 app.proto.addRoom = () ->
   model = app.model
   return unless model.get "_session.loggedIn"
-  console.log "adding track"
-  model.add "tracks",
+  trackId = model.add "tracks",
     name: "just another track"
-    md: "# my track"
+    md: "# my track\n\n the theme of this track is ..."
     data:
       text: "{answer: 42}"
       type: "json"
     userId: model.get "_session.user.id"
+  app.history.push "/track/#{trackId}"
 
 
 

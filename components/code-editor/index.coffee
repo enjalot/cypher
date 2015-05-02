@@ -17,7 +17,6 @@ module.exports = class CodeEditor
   create: () ->
 
     listenToCursor = (active) =>
-      console.log "editor", active, @editor
       cm = @editor.cm
       debounce = null
       cm.on "cursorActivity", (cm) =>

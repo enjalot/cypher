@@ -1,5 +1,6 @@
 <index:>
   <div class="code-editor">
+    {{@content}}
     <div class="tabs">
       {{each tabs as #tab}}
         <div class="tab {{if active === #tab}}active{{/if}}" on-click="select(#tab)">

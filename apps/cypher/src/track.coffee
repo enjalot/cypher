@@ -31,9 +31,9 @@ app.get '/track/:trackId', (page, model, {trackId}, next) ->
         userId: model.get "_session.user.id"
         name: "mic check"
         code:
-          js: 'console.log("hi")'
-          html: '<div class="custom">cool</div>'
-          css: '.custom { border: 1px solid orange; }'
+          js: 'console.log("hi", data)'
+          html: '<div class="custom">through the lights camera action glamour glitter and gold</div>'
+          css: '.custom { color: #050505 }'
       }
       model.ref "_page.cypher", model.at "cyphers.#{cypherId}"
 

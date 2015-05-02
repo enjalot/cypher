@@ -92,7 +92,7 @@ module.exports = class Cypher
 
   inActive: (presence) ->
     # TODO use timezones
-    dt = +new Date() - presence.lastSeenAt 
+    dt = +new Date() - presence?.lastSeenAt 
     if dt > ACTIVE
       return true
     else

@@ -1,15 +1,10 @@
 // track
 
 headerHeight = 80px
-trackHeight = 450px
+trackHeight = 370px
 
 .track
   //.new-cypher
-  a,a:visited
-    color: black
-    font-family: Roboto
-  a:hover
-    color: black
 
   .track-nav
     position:absolute
@@ -20,80 +15,107 @@ trackHeight = 450px
     font-weight: bold
     font-family: Roboto
 
-  background-color: #e2e8e9
     
   .track-expand
     max-height: 100%
     overflow: auto
+
   .track-content
     max-height: trackHeight
     overflow: hidden
+    background-color: cblueDark
+
+    &.open
+      min-height: 100%
 
 
     .right-wrapper
       width: 49%
-      border: 1px solid green
+      max-width: 420px
       float: right
+      margin-right: 10px
       height: trackHeight
 
       iframe
-        min-height: 300px
+        min-height: 200px
 
     .description
       width: 49%
       height: 100%
-      color: black
+      color: cyellow
       float: left
+
+      .btn
+        color: cgreen
+        padding: 0px
+        padding-left:5px
+        margin-top: 10px
+        float: right
 
     .description-text
       padding: 10px
       font-family: "Source Sans Pro"
 
     .data
-      margin: 10px
-      width: 100%
+      margin-left: 10px
+      border-top: 1px solid cyellow
+      .btn
+        margin: 0
+        padding: 0
       textarea
         width: 100% 
         min-height: 200px
+
+      .type
+        color: cgrayLight
 
       .preview
         width: 100%
         overflow: hidden;
         text-overflow: ellipsis; 
+        padding-top: 5px
+
+      h1
+        padding: 0
+        margin: 0
+        
 
 
     .primary-cypher
-      margin: 10px auto
+      //margin: 10px auto
       width: 420px
       height: 315px
       float: left
       clear:left
 
     .video
-      margin: 10px auto
+      //margin: 10px auto
       width: 420px
       height: 315px
       clear:left
       float:left
 
     .name
-      margin: 5px
-      color: red
+      margin: 5px 0px
+      color: cyellow
       float:left
       clear:left
 
     .btn
-      margin: 5px
-      padding: 5px
       text-decoration: none
-      color: blue
+      color: cblack
 
     .tabs
-      float:left
-      clear:left
+      float:right
+      .tab
+        line-height: 40px
+        height: 40px
+        display:inline-block
+        margin:0
+        padding: 0px 10px
     .active
-      background: white
-      color: green
+      background: cblue
+      color: cyellow
 
       
   .track-cypher
@@ -113,13 +135,14 @@ trackHeight = 450px
     height: 100%
     float: left
     clear: left
+    background-color: cblueLight
 
   .cypher-thumb
     width: 300px
-    height: 300px
+    height: 200px
     .component-renderer
       width: 600px
-      height: 600px
+      height: 400px
       transform: scale(0.5)translate(-50%, -50%)
     iframe
       min-height: 0

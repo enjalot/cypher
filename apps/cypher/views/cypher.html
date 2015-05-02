@@ -12,26 +12,29 @@
       </view>
 
       <div class="right-wrapper">
-        <div class="extras">
-          <div class="cypher-name">
-            {{if canEdit()}}
-            <input value="{{cypher.name}}" placeholder="cypher name" title="name">
-            {{else}}
-              {{cypher.name}}
-            {{/if}}
-            <a class="btn" on-click="forkCypher(cypher)">Fork</a>
-          </div>
-          {{if addLibs}}
-          <view is="libs" styles="{{cypher.libs}}"></view>
-          {{/if}}
-          <!-- <view is="styles" styles="{{cypher.styles}}"></view> -->
-        </div>
         <view is="code-editor"
           code="{{cypher.code}}"
           read-only="{{readOnly}}"
           presences="{{presences}}"
           on-cursor="cursorHandler()"
           show-cursors="{{showCursors}}">
+          <div class="extras">
+            <div>
+              <span class="cypher-name">
+              {{if canEdit()}}
+              <input value="{{cypher.name}}" placeholder="cypher name" title="name">
+              {{else}}
+                {{cypher.name}}
+              {{/if}}
+              </span>
+              <img class="avatar" src="{{#root.users[cypher.userId].github._json.avatar_url}}">
+              <a class="btn fork" on-click="forkCypher(cypher)">Fork</a>
+            </div>
+            {{if addLibs}}
+            <view is="libs" styles="{{cypher.libs}}"></view>
+            {{/if}}
+            <!-- <view is="styles" styles="{{cypher.styles}}"></view> -->
+          </div>
         </view>
       </div>
     </div>
